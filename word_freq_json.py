@@ -5,7 +5,7 @@ from pprint import pprint
 import tsne
 import plsa
 import numpy as np
-import pylab
+#import pylab
 
 
 webapi =  json.load(urllib.urlopen("http://www.kimonolabs.com/api/9d6lg708?apikey=5243944dc6c0c5602dd3f6f0ef19f2cf"))
@@ -69,17 +69,17 @@ print Y
 
 
 
-fig = pylab.figure()
-ax = fig.add_subplot(111)
+#fig = pylab.figure()
+#ax = fig.add_subplot(111)
 
 
 print weblab
-pylab.scatter(Y[nD:nD+nW,0], Y[nD:nD+nW,1], 20,color='blue');
-pylab.scatter(Y[0:nD,0]    , Y[0:nD,1]    , 20,color='red');
+#pylab.scatter(Y[nD:nD+nW,0], Y[nD:nD+nW,1], 20,color='blue');
+#pylab.scatter(Y[0:nD,0]    , Y[0:nD,1]    , 20,color='red');
 
 labels  = wordID.keys()
 
-pylab.show()
+#pylab.show()
 
 
 #json.dumps(wordID,ensure_ascii=False)

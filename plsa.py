@@ -1,6 +1,9 @@
 import numpy as np
 def ksum(A,dim):
-    return np.sum(A,dim,keepdims=True)
+    try:
+        return np.sum(A,dim,keepdims=True)
+    except:
+        return np.expand_dims(np.sum(A,dim),dim)
 
 def plsa(Ndw,Nz,iteration):
     #dimension order Nz->Nd->Nw
