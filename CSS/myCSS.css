@@ -1,0 +1,33 @@
+.graph-svg-component {
+    background-color: #eae5c7;
+}
+.type0_ON{
+    opacity: 1;
+}
+.type0_OFF{
+    opacity: 0;
+}
+.ThesisIt_tittle{
+    height: 80px;
+    width: 1280px;
+    background-color: #ddded1;
+}
+.input_query{
+    margin-left: 73%;
+    margin-top: 25px;
+    padding-right: 100px;
+    background-color: #eeefe1;
+}
+.icons{
+    margin-top: 5px;
+    margin-left: 5px;
+    position: absolute;
+    display: block;
+}
+.button_query{
+    border: 3px solid #eeefe1;
+    color: #87896e;
+    /* width: 300px; */
+    border-radius: 5px;
+    padding: 3px 20px;
+}

@@ -1,0 +1,70 @@
+{
+ "name": "TUI", "x":468, "y":300,"type":1,
+ "children": [
+  {
+       "name": "Interactive Surface", "x":468, "y":200, "type":1, "distance":4,
+       "children": [
+        {
+         "name": "Urp", "x":468, "y":100, "type":2, "img_href":"paper_icons/urp.png","distance":6,
+         "children": [
+          {"name": "Urban Planning", "size": 3938, "x":268, "y":200, "type":1,"distance":5 },
+          {"name": "Design", "size": 3812, "x":368, "y":300, "type":1, "distance":9},
+          {"name": "Luminous", "size": 6714, "x":268, "y":400, "type":1, "distance":5},
+          {"name": "MergeEdge", "size": 743, "x":668, "y":300, "type":1,"distance":6}
+         ]
+        },
+        {
+         "name": "Slap widgets", "x":468, "y":100, "type":2, "img_href":"paper_icons/widgets.png" ,"distance":6,
+         "children": [
+          {"name": "Controllers", "size": 3938, "x":268, "y":200, "type":1,"distance":6 },
+          {"name": "Table Interfaces", "size": 3812, "x":368, "y":300, "type":1, "distance":8}
+         ]
+        },
+        {
+         "name": "I/O Brush", "x":468, "y":100, "type":2, "img_href":"paper_icons/IOBrush.png","distance":7,
+         "children": [
+          {"name": "textures", "size": 3938, "x":268, "y":200, "type":1,"distance":6 },
+          {"name": "touch sensors", "size": 3938, "x":268, "y":200, "type":1,"distance":6 },
+          {"name": "paintbrush", "size": 3812, "x":368, "y":300, "type":1, "distance":7}
+         ]
+        },
+        {
+         "name": "illuminating Clay", "x":468, "y":100, "type":2, "img_href":"paper_icons/clay.png","distance":8,
+         "children": [
+          {"name": "GRASS", "size": 3938, "x":268, "y":200, "type":1,"distance":4 },
+          {"name": "spatial models", "size": 3938, "x":268, "y":200, "type":1,"distance":6 }
+         ]
+        }
+       ]
+  },
+  {
+         "name": "Token+Constraint", "x":468, "y":500,"type":1, "distance":6,
+         "children": [
+          {"name": "inFORM", "size": 3534, "x":768, "y":500, "type":2, "img_href":"paper_icons/imform.png","distance":6,
+            "children": [
+              {"name": "Shape Display", "size": 3938, "x":268, "y":200, "type":1,"distance":4 },
+              {"name": "table’s surface", "size": 3938, "x":268, "y":200, "type":1,"distance":6 }
+             ]
+          },
+          {"name": "DataTiles", "size": 5731, "x":668, "y":500, "type":2, "img_href":"paper_icons/tiles.png","distance":12,
+           "children": [
+             {"name": "SONY", "size": 3938, "x":268, "y":200, "type":1,"distance":6 },
+              {"name": "Glass tile", "size": 3938, "x":268, "y":200, "type":1,"distance":6 }
+           ]},
+          {"name": "PICO", "size": 7840, "x":568, "y":500, "type":1,"distance":6}
+         ]
+  },
+  {
+         "name": "Constructive Assembly", "x":268, "y":500, "type":1, "distance":6,
+         "children": [
+          {"name": "Topobo", "size": 7074, "x":168, "y":500, "type":2, "img_href":"paper_icons/topobo.png","distance":6,
+           "children": [
+             {"name": "Kinect", "size": 3938, "x":268, "y":200, "type":1,"distance":7 },
+              {"name": "physical motion", "size": 3938, "x":268, "y":200, "type":1,"distance":6 },
+              {"name": "biomorphic", "size": 3812, "x":368, "y":300, "type":1, "distance":8}
+           ]
+          }
+         ]
+  }
+ ]
+}
