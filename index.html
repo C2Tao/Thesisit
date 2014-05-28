@@ -58,7 +58,7 @@
     <script>
 
     var width = 1280,
-        height = 600,
+        height = 800,
         root;
 
     var force = d3.layout.force()
@@ -76,7 +76,7 @@
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
 
-    d3.json("JSON/graphTUI.json", function(error, json) {
+    d3.json("http://localhost:5000/query/plsa", function(error, json) {
       root = json;
       update();
     });
@@ -121,22 +121,37 @@
 //  });
       
           
-          d3.selectAll(".type2").append("image")
-          .attr("xlink:href", function(d){return d.img_href})
-          .attr("opacity",.7)
-          .attr("x", -25)
-          .attr("y", -25)
-          .attr("width", 50)
-          .attr("height", 50)
-          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("x", -40)
-          .attr("y", -40).attr("width", 80).attr("opacity",1)
-          .attr("height", 80);
+//          d3.selectAll(".type2").append("image")
+//          .attr("xlink:href", function(d){return d.img_href})
+//          .attr("opacity",.7)
+//          .attr("x", -25)
+//          .attr("y", -25)
+//          .attr("width", 50)
+//          .attr("height", 50)
+//          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("x", -40)
+//          .attr("y", -40).attr("width", 80).attr("opacity",1)
+//          .attr("height", 80);
+//  })
+//          
+//          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("x", -25)
+//          .attr("y", -25).attr("width", 50).attr("opacity",.3)
+//          .attr("height", 50);
+//  });
+          d3.selectAll(".type2").append("circle")
+          .attr("r", function(d) { return 20; })
+          
+          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("r", 30)
   })
           
-          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("x", -25)
-          .attr("y", -25).attr("width", 50).attr("opacity",.3)
-          .attr("height", 50);
-  });
+          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("r", 20);
+  })
+          .style("fill", color1);
+          
+          nodeEnter.append("text")
+          .attr("dy", "2em")
+          .text(function(d) { return d.name; });
+          
+          
           d3.selectAll(".type1").append("circle")
           .attr("r", function(d) { return 20; })
           

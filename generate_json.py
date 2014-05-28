@@ -105,50 +105,51 @@ node_name = 'name'
 doc_type = 2
 word_type = 1
 
-for i in range(nD):
-    key_doc = webapi['results']['papers'][i]['title']['text']
-    if i == 0:
-        center_doc[node_name] = key_doc
-        center_doc['x'] = Y[0,0]
-        center_doc['y'] = Y[0,1]
-        center_doc[node_type] = doc_type
-        center_doc[children] = []
 
-        for j in range(nW):
-            if Ndw[i][j] != 0 :
-                keyword_data = {}
-                keyword_data['x'] = Y[j+nD,0]
-                keyword_data['y'] = Y[j+nD,1]
-                xDiff = center_doc['x']-Y[j+nD,0]
-                yDiff = center_doc['y']-Y[j+nD,1]
-                keyword_data[distance] = math.sqrt(xDiff*xDiff+yDiff*yDiff)
-                keyword_data[node_name] = IDword[j]
-                keyword_data[node_type] = word_type
-                center_doc[children].append(keyword_data)
-    else:
-        doc_data = {}
-        doc_data['x'] = Y[i,0]
-        doc_data['y'] = Y[i,1] 
-        doc_data[node_name] = key_doc
-        doc_data[node_type] = doc_type
-        doc_data[children] = []
-        xDiff = center_doc['x']-Y[i,0]
-        yDiff = center_doc['y']-Y[i,1]
-        doc_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
-        for j in range(nW):
-            if Ndw[i][j] != 0 :
-                keyword_data = {}
-                keyword_data['x'] = Y[j+nD,0]
-                keyword_data['y'] = Y[j+nD,1]
-                xDiff = Y[i,0] - Y[j+nD,0]
-                yDiff = Y[i,1] - Y[j+nD,1]
-                keyword_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
-                keyword_data[node_name] = IDword[j]
-                keyword_data[node_type] = word_type
-                doc_data[children].append(keyword_data)
-        center_doc[children].append(doc_data)
+# for i in range(nD):
+#     key_doc = webapi['results']['papers'][i]['title']['text']
+#     if i == 0:
+#         center_doc[node_name] = key_doc
+#         center_doc['x'] = Y[0,0]
+#         center_doc['y'] = Y[0,1]
+#         center_doc[node_type] = doc_type
+#         center_doc[children] = []
 
-with open('json_all.txt', 'wb') as outfile:
-    json.dump(center_doc, outfile,ensure_ascii=False)
+#         for j in range(nW):
+#             if Ndw[i][j] != 0 :
+#                 keyword_data = {}
+#                 keyword_data['x'] = Y[j+nD,0]
+#                 keyword_data['y'] = Y[j+nD,1]
+#                 xDiff = center_doc['x']-Y[j+nD,0]
+#                 yDiff = center_doc['y']-Y[j+nD,1]
+#                 keyword_data[distance] = math.sqrt(xDiff*xDiff+yDiff*yDiff)
+#                 keyword_data[node_name] = IDword[j]
+#                 keyword_data[node_type] = word_type
+#                 center_doc[children].append(keyword_data)
+#     else:
+#         doc_data = {}
+#         doc_data['x'] = Y[i,0]
+#         doc_data['y'] = Y[i,1] 
+#         doc_data[node_name] = key_doc
+#         doc_data[node_type] = doc_type
+#         doc_data[children] = []
+#         xDiff = center_doc['x']-Y[i,0]
+#         yDiff = center_doc['y']-Y[i,1]
+#         doc_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
+#         for j in range(nW):
+#             if Ndw[i][j] != 0 :
+#                 keyword_data = {}
+#                 keyword_data['x'] = Y[j+nD,0]
+#                 keyword_data['y'] = Y[j+nD,1]
+#                 xDiff = Y[i,0] - Y[j+nD,0]
+#                 yDiff = Y[i,1] - Y[j+nD,1]
+#                 keyword_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
+#                 keyword_data[node_name] = IDword[j]
+#                 keyword_data[node_type] = word_type
+#                 doc_data[children].append(keyword_data)
+#         center_doc[children].append(doc_data)
 
-print center_doc 
+# with open('json_all.txt', 'wb') as outfile:
+#     json.dump(center_doc, outfile,ensure_ascii=False)
+
+# print center_doc 

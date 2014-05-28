@@ -4,14 +4,15 @@ var fs = require('fs');
 var jsonfile = __dirname + '/json_all.txt';
 
 
-
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(app.router);
-//app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/'));
 
 app.get('/query/:querystring', function(req, res){
      
+     console.log('start to run python');
+
      var python = require('child_process').spawn(
        'python',
        // second argument is array of parameters, e.g.:
@@ -19,31 +20,28 @@ app.get('/query/:querystring', function(req, res){
      );
 
 
-     var output = "";
-     //when python dump info to standard output(e.g.:print ...), it would call this callback
-     python.stdout.on('data', function(data){ 
-        output += data;
-     });
-
-
-     
-      
+     // var output = "";
+     // //when python dump info to standard output(e.g.:print ...), it would call this callback
+     // python.stdout.on('data', function(data){ 
+     //    output += data;
+     // });
+ 
 
      python.on('close', function(code){ 
        //I think here we can read from the json file that we saved in python script
        
-      fs.readFile(jsonfile, 'utf8', function (err, data) {
-        if (err) {
-          console.log('Error: ' + err);
-          return;
-        }
-       
-        data = JSON.parse(data);
-       
-        console.dir(data);
+        fs.readFile(jsonfile, 'utf8', function (err, data) {
+          if (err) {
+            console.log('Error: ' + err);
+            return;
+          }
+         
+          data = JSON.parse(data);
 
-        res.json(data);
-      });     //when python finished running the script
+          console.log("done");
+
+          res.json(data);
+        });     //when python finished running the script
 
 
 
