@@ -49,7 +49,7 @@
 }
 .logoPic{
     position: fixed;
-    background: url(img/LOGO.png) no-repeat;
+    background: url(/img/LOGO.png) no-repeat;
     left: 40px;
     top: 32px;
 	width: 100px;

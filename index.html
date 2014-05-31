@@ -57,14 +57,14 @@
  
     <script>
 
-    var width = 1280,
-        height = 600,
+    var width = 1440,
+        height =1000,
         root;
 
     var force = d3.layout.force()
         //.linkDistance(function(d){return (d.distance);})
         .charge(-250)
-        .gravity(.02)
+        .gravity(.01)
         .size([width, height])
         .on("tick", tick);
 
@@ -88,7 +88,7 @@
       force
           .nodes(nodes)
           //.linkDistance(function(d){return (d.distance);})
-          .linkDistance(function(d) { return d.target.distance*10; })
+          .linkDistance(function(d) { return d.target.distance*20; })
           .links(links)
           .start();
 
@@ -110,46 +110,65 @@
           .attr("class", function(d) { return "node type" + d.type })
           .on("click", click)
           .call(force.drag)
-
-//      nodeEnter.append("circle")
+      
+      nodeEnter.append("circle")
+          .attr("r", function(d) { return 30; })
+          .style("fill", color1)
+          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("r", 40)
+  })
+          
+          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("r", 30);
+  });
+      nodeEnter.append("text")
+          .attr("dy", "2em")
+          .text(function(d) { return d.name; });
+      }
+// paper with pics-------------------------------------------          
+//          d3.selectAll(".type2").append("image")
+//          .attr("xlink:href", function(d){return d.img_href})
+//          .attr("opacity",.7)
+//          .attr("x", -25)
+//          .attr("y", -25)
+//          .attr("width", 50)
+//          .attr("height", 50)
+//          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("x", -40)
+//          .attr("y", -40).attr("width", 80).attr("opacity",1)
+//          .attr("height", 80);
+//  })
+//          
+//          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("x", -25)
+//          .attr("y", -25).attr("width", 50).attr("opacity",.3)
+//          .attr("height", 50);
+//  }); 
+// All circle-------------------------------------------
+//          d3.selectAll(".type2").append("circle")
 //          .attr("r", function(d) { return 20; })
 //          
 //          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("r", 30)
 //  })
 //          
 //          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("r", 20);
-//  });
-      
-          
-          d3.selectAll(".type2").append("image")
-          .attr("xlink:href", function(d){return d.img_href})
-          .attr("opacity",.7)
-          .attr("x", -25)
-          .attr("y", -25)
-          .attr("width", 50)
-          .attr("height", 50)
-          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("x", -40)
-          .attr("y", -40).attr("width", 80).attr("opacity",1)
-          .attr("height", 80);
-  })
-          
-          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("x", -25)
-          .attr("y", -25).attr("width", 50).attr("opacity",.3)
-          .attr("height", 50);
-  });
-          d3.selectAll(".type1").append("circle")
-          .attr("r", function(d) { return 20; })
-          
-          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("r", 30)
-  })
-          
-          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("r", 20);
-  })
-          .style("fill", color1);
-          
-          nodeEnter.append("text")
-          .attr("dy", "2em")
-          .text(function(d) { return d.name; });
+//  })
+//          .style("fill", color1);
+//          
+//          nodeEnter.append("text")
+//          .attr("dy", "2em")
+//          .text(function(d) { return d.name; });
+//          
+//          
+//          d3.selectAll(".type1").append("circle")
+//          .attr("r", function(d) { return 20; })
+//          
+//          .on('mouseover', function() { d3.select(this).transition().duration(200).attr("r", 30)
+//  })
+//          
+//          .on('mouseout', function() { d3.select(this).transition().duration(500).attr("r", 20);
+//  })
+//          .style("fill", color1);
+//          
+//          nodeEnter.append("text")
+//          .attr("dy", "2em")
+//          .text(function(d) { return d.name; });
 //      node.append("image")
 //          .attr("xlink:href", function(d){return d.img_href})
 //          .attr("x", -25)
@@ -171,7 +190,7 @@
 //              }
 //          });
     
-    }
+    
     function tick() {
       link.attr("x1", function(d) { return d.source.x; })
           .attr("y1", function(d) { return d.source.y; })
@@ -191,22 +210,25 @@
       if(d.type === 1){
           return "rgb(98, 206, 176)" ;
       }
-      else{
+      else if(d.type === 2){
           return "#fd8d3c";
+      }
+      else{
+          return "rgb(255, 206, 12)" ;
       }
     }
     // Toggle children on click.
     function click(d) {
       if (d3.event.defaultPrevented) return; // ignore drag
-      
-//      if (d.children) {
-//        d._children = d.children;
-//        d.children = null;
-//      } else {
-//        d.children = d._children;
-//        d._children = null;
-//      }
-//      update();
+        
+      if (d.children) {
+        d._children = d.children;
+        d.children = null;
+      } else {
+        d.children = d._children;
+        d._children = null;
+      }
+      update();
     }
 
     // Returns a list of all nodes under the root.
