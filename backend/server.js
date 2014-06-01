@@ -1,15 +1,18 @@
 var express = require('express'); 
-var app = express();
 var fs = require('fs');
-var jsonfile = __dirname + '/json_all.txt';
 
+//paths
+var jsonFileForFrontEnd = __dirname + '/json_all.txt';
+var frontEndPath = __dirname + '/../public';
+var port = 5000;
 
+var app = express();
 app.use(express.json());
 app.use(express.urlencoded());
 app.use(app.router);
-app.use(express.static(__dirname + '/'));
+app.use(express.static(frontEndPath));
 
-app.get('/query/:querystring', function(req, res){
+app.get('/query/:querystring', function(req, res){ //api for client to query
      
      console.log('start to run python');
 
@@ -26,13 +29,12 @@ app.get('/query/:querystring', function(req, res){
      //    output += data;
      // });
  
-
-     python.on('close', function(code){ 
-       //I think here we can read from the json file that we saved in python script
+     python.on('close', function(){  //when python finished running the script
        
-        fs.readFile(jsonfile, 'utf8', function (err, data) {
+        fs.readFile(jsonFileForFrontEnd, 'utf8', function (err, data) {
           if (err) {
             console.log('Error: ' + err);
+            res.status(500); //operation failed;
             return;
           }
          
@@ -41,16 +43,12 @@ app.get('/query/:querystring', function(req, res){
           console.log("done");
 
           res.json(data);
-        });     //when python finished running the script
-
-
-
-
+        });    
 
      });
          
    
 })
-.listen(5000, function(){
-  console.log('Listening on 5000');
+.listen(port, function(){
+    console.log('Listening on ' + String(port));
 });
