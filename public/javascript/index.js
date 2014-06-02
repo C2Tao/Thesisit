@@ -1,8 +1,6 @@
 (function() {
 
-    var width = 1280,
-        height = 800,
-        root;
+    var root;
 
     var force = d3.layout.force()
         //.linkDistance(function(d){return (d.distance);})
@@ -13,8 +11,11 @@
 
     //draw inside this svg
     var svg = d3.select("body").append("svg")
-        .attr("width", width)
-        .attr("height", height)
+        .style("z-index",10)
+        .style("width","auto")
+        .style("height","auto")
+        //.attr("width", width)
+        //.attr("height", height)
         .attr("class", "graph-svg-component");
 
     var link = svg.selectAll(".link"),
