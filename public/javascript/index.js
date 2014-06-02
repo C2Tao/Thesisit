@@ -11,6 +11,7 @@
         .size([width, height])
         .on("tick", tick);
 
+    //draw inside this svg
     var svg = d3.select("body").append("svg")
         .attr("width", width)
         .attr("height", height)
@@ -19,7 +20,7 @@
     var link = svg.selectAll(".link"),
         node = svg.selectAll(".node");
 
-    d3.json("http://localhost:5000/query/plsa", function(error, json) {
+    d3.json("exJSON/graphTUI.json", function(error, json) {
       root = json;
       update();
     });

@@ -43,6 +43,7 @@ app.get('/query/:querystring', function(req, res){ //api for client to query
           console.log("done");
 
           res.json(data);
+          
         });    
 
      });
