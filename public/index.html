@@ -1,66 +1,51 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<head>
-    <link rel="stylesheet" href="css/myCSS.css">
-    <link rel="stylesheet" href="css/myCSS_hover.css">
-    <link rel="stylesheet" href="css/myCSS_navbar.css">
-    <link rel="stylesheet" href="css/index.css">
-</head>
-    
-<body>
-<!--<div class="ThesisIt_tittle">
-    <span class="icons"><img src="ThesisIt2.png" alt="" ></span>
-    <span>
-        <input class="input_query"></input>
-    </span>
-    <span class="button_query"><a href="index6.html" style="text-decoration:none;color: #87896e;">Search
-    </span>
-</div>-->
+<style type="text/css">
+  
+  .node {
+    cursor: pointer;
+  }
 
-<header class="banner_back">
-    <div class="LogoCircle_out"></div>
-    <div class="banner"><div class="banner_tittle">ThesisIt!</div>
-        <div class="ud-search search-v4 ml15">
-            <form id="searchbox" action="/index8.html">
-                <input type="text" placeholder="Search for Keywords, Papers..." autocomplete="off" name="q"
-                       class="search-input ui-autocomplete-input quick-search"
-                       value=""/>
-                <button type="submit" class="icon-search search-btn"><img src="img/toolbar_find.png"><a href="index8.html"></button>
-            </form>
-        </div>
-        <div class="LogoCircle" ><div class="logoPic" ></div></div>
-    </div>
-</header>
+  .overlay{
+      background-color:#EEE;
+  }
+   
+  .node circle {
+    fill: #fff;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+  }
+   
+  .node text {
+    font-size:10px; 
+    font-family:sans-serif;
+  }
+   
+  .link {
+    fill: none;
+    stroke: #ccc;
+    stroke-width: 1.5px;
+  }
 
-<script src="D3JS/d3.min.js"></script>
-<script src="javascript/jquery-1.11.1.min.js"></script>
-    <div class="logoCol">
-        <h2 class="logo">ThesisIt</h2>
-        <a class="about">paper search engine visualizer</a>
-    </div>
-    <div class="bar-container">
-			<div id='map-control' class="bar clear-float">
-				<a class="view view-map on" href="/"><span></span>ThesisIt</a>
-				<a class="view view-grid" href="/grid"><span></span>Grid</a>
-				<div class="bar-section bar-section-view">
-					<label>View:</label>
-					<ul>
-						<li><a href="#type=all" class="no-icon">All</a></li>
-						<li><a href="#type=problem" class="problem"><span></span>Keywords</a></li>
-						<li><a href="#type=interview" class="interview"><span></span>Papers</a></li>
-<!--						<li><a href="#type=narrative" class="narrative"><span></span>Narrative</a></li>-->
-					</ul>
-				</div>
-				<div class="bar-section bar-section-cat">
-					<label>Category:</label>
-					<div class="categories">
-						<a class="menu all" href="#"><span></span>All<em></em></a>
-						<ul class="clear-float"><li><a href="#category=simple" class="simple"><span></span>Simple</a></li><li><a href="#category=social" class="social"><span></span>Social</a></li><li><a href="#category=navigational" class="navigational"><span></span>Navigational</a></li><li><a href="#category=technological" class="technological"><span></span>Technological</a></li><li><a href="#category=transportational" class="transportational"><span></span>Transportational</a></li><li><a href="#category=repurposing" class="repurposing"><span></span>Repurposing</a></li><li><a href="#category=cultural" class="cultural"><span></span>Cultural</a></li><li><a href="#category=economic" class="economic"><span></span>Economic</a></li><li><a href="#category=experimental" class="experimental"><span></span>Experimental</a></li><li><a href="#category=all"><span></span>All</a></li></ul>
-					</div>
-				</div>
-			</div>
-    </div>
-    
+  .templink {
+    fill: none;
+    stroke: red;
+    stroke-width: 3px;
+  }
+
+  .ghostCircle.show{
+      display:block;
+  }
+
+  .ghostCircle, .activeDrag .ghostCircle{
+       display: none;
+  }
+
+</style>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="javascript/index.js"></script>
-
+<body>
+    <div id="tree-container"></div>
 </body>
+</html>

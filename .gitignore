@@ -1,4 +1,4 @@
-*.json
+backend/*.json
 *.pyc
 json_all.txt
 
