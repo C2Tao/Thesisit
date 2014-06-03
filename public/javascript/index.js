@@ -1,5 +1,5 @@
 // Get JSON data
-treeJSON = d3.json("exJSON/flare.json", function(error, treeData) {
+treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
 
     // Calculate total nodes, max label length
     var totalNodes = 0;
@@ -39,11 +39,16 @@ treeJSON = d3.json("exJSON/flare.json", function(error, treeData) {
         if (children) {
             var count = children.length;
             for (var i = 0; i < count; i++) {
+                children[i].accmDis = children[i].distance * 50 + parent.accmDis;
+                //console.log(parent.name);
+                //console.log(children[i].name);
+                //console.log(children[i].y);
                 visit(children[i], visitFn, childrenFn);
             }
         }
     }
 
+    treeData.accmDis = 0;
     // Call visit function to establish maxLabelLength
     visit(treeData, 
           function(d) {
@@ -51,7 +56,21 @@ treeJSON = d3.json("exJSON/flare.json", function(error, treeData) {
             maxLabelLength = Math.max(d.name.length, maxLabelLength);
 
           }, 
-          function(d) {
+          function(d) { 
+            //console.log(d);
+            //do sorting here
+            // d.children.sort(function (a,b) {
+            //     if(a.distance > b.distance) { 
+            //         return 1; //a come first in this array
+            //     }
+            //     else if(a.distance < b.distance){
+            //         return -1;
+            //     }
+            //     else {
+            //         return 0;
+            //     }
+            // });
+
             return d.children && d.children.length > 0 ? d.children : null;
           }
     );
@@ -65,7 +84,7 @@ treeJSON = d3.json("exJSON/flare.json", function(error, treeData) {
         });
     }
     // Sort the tree initially incase the JSON isn't in a sorted order.
-    sortTree();
+    //sortTree();
 
     // TODO: Pan function, can be better implemented.
 
@@ -385,14 +404,16 @@ treeJSON = d3.json("exJSON/flare.json", function(error, treeData) {
                             return d.id || (d.id = ++i);
                        });
 
-        //specified distances here
+        
         nodes.forEach(function(d) {
-            d.y = d.depth * Math.floor((Math.random() * 200) + 400);; //maxLabelLength * 10px
+            //console.log(d.y);
+            //console.log(d.name);
+            d.y = d.accmDis; //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
             // d.y = (d.depth * 500); //500px per level.
         });
-
+        
         
 
         // Enter any new nodes at the parent's previous position.
@@ -430,7 +451,7 @@ treeJSON = d3.json("exJSON/flare.json", function(error, treeData) {
             .attr('class', 'ghostCircle')
             .attr("r", 30)
             .attr("opacity", 0.2) // change this to zero to hide the target area
-        .style("fill", "red")
+            .style("fill", "red")
             .attr('pointer-events', 'mouseover')
             .on("mouseover", function(node) {
                 overCircle(node);
