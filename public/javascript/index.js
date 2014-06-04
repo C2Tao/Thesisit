@@ -14,6 +14,11 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
     var i = 0;
     var duration = 750;
     var root;
+    var nodes;
+    var links;
+
+    var nodeCircleRadius = 7.5;
+    var increaseRadius = 20;
 
     // size of the diagram
     var viewerWidth = $(document).width();
@@ -30,6 +35,8 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
 
     // A recursive helper function for performing some setup by walking through all nodes
 
+    var distanceScaleFactor = 30;
+
     function visit(parent, visitFn, childrenFn) {
         if (!parent) return;
 
@@ -39,16 +46,13 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
         if (children) {
             var count = children.length;
             for (var i = 0; i < count; i++) {
-                children[i].accmDis = children[i].distance * 50 + parent.accmDis;
-                //console.log(parent.name);
-                //console.log(children[i].name);
-                //console.log(children[i].y);
+                children[i].accumDis = children[i].distance * distanceScaleFactor + parent.accumDis;
                 visit(children[i], visitFn, childrenFn);
             }
         }
     }
 
-    treeData.accmDis = 0;
+    treeData.accumDis = 0;
     // Call visit function to establish maxLabelLength
     visit(treeData, 
           function(d) {
@@ -57,7 +61,6 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
 
           }, 
           function(d) { 
-            //console.log(d);
             //do sorting here
             // d.children.sort(function (a,b) {
             //     if(a.distance > b.distance) { 
@@ -75,19 +78,19 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
           }
     );
 
+    // Define the zoom function for the zoomable tree
 
-    // sort the tree according to the node names
-
-    function sortTree() {
-        tree.sort(function(a, b) {
-            return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
-        });
+    function zoom() {
+        svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     }
-    // Sort the tree initially incase the JSON isn't in a sorted order.
-    //sortTree();
+
+    // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
+    var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
+
+    /*
 
     // TODO: Pan function, can be better implemented.
-
+    
     function pan(domNode, direction) {
         var speed = panSpeed;
         if (panTimer) {
@@ -113,18 +116,6 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
         }
     }
 
-    // Define the zoom function for the zoomable tree
-
-    function zoom() {
-        svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-    }
-
-
-    // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
-    var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
-
-
-    /*
     function initiateDrag(d, domNode) {
         draggingNode = d;
         
@@ -196,19 +187,65 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
     }
     */
 
+    var dragStarted = false;
+    var featuresList = null;
     // Define the drag listeners for drag/drop behaviour of nodes.
-    dragListener = d3.behavior.drag()
+    var dragListenerForNodes = d3.behavior.drag()
+        .on("dragstart", function(d) {
+            dragStarted = true;
+            //nodes = tree.nodes(d);
+            
+            //console.log(this);
+            //console.log(d3.select(d).attr("cx") + ' ' + d3.select(d).attr("cy"));
+            //console.log(d.x + ' ' + d.y);
+            //var coordinates = d3.mouse(this);
+            //console.log(coordinates[0] + ' ' + coordinates[1]);
+            
+            //generate svg element
+            featuresList = svgGroup.selectAll("g.arc")
+                                   .data(featureNamesPieData)
+                                   .enter()
+                                   .append("g")
+                                   .attr("class", "arc")
+                                   .attr("transform", "translate(" + d.y + "," + d.x + ")");
+            //console.log(featuresList);
+            
+            //draw arc shapes
+            featuresList.append("path")
+                        .attr("d", arc)
+                        .style("fill", function(d) { return color(d.data.name); })
+                        .on('mouseover',function(node) {
+                            console.log(node);
+                        });
+
+            //draw text on donut chart
+            featuresList.append("text")
+                        .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; }) //font-position
+                        .attr("dy", "0.35em")
+                        .style("font-size","8px")
+                        .style("text-anchor", "middle")
+                        .text(function(d) { return d.data.name; });
+            
+            d3.event.sourceEvent.stopPropagation();
+            // it's important that we suppress the mouseover event on the node being dragged. 
+            //Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
+        
+        })
+        .on("drag", function(d) {
+            //console.log(d.x + ' ' + d.y);
+        })
+        .on("dragend", function(d) {
+            dragStarted = false;
+            featuresList.remove();
+        });
+
         /*
         .on("dragstart", function(d) {
-            if (d == root) {
-                return;
-            }
             dragStarted = true;
             nodes = tree.nodes(d);
             d3.event.sourceEvent.stopPropagation();
             // it's important that we suppress the mouseover event on the node being dragged. Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
         })
-        */ 
         .on("drag", function(d) {
             if (d == root) {
                 return;
@@ -220,6 +257,7 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
             // }
 
             // get coords of mouseEvent relative to svg container to allow for panning
+            
             relCoords = d3.mouse($('svg').get(0));
             if (relCoords[0] < panBoundary) {
                 panTimer = true;
@@ -248,7 +286,6 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
             node.attr("transform", "translate(" + d.y0 + "," + d.x0 + ")");
             updateTempConnector();
         })
-        /*
         .on("dragend", function(d) {
             if (d == root) {
                 return;
@@ -279,12 +316,11 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
             }
         });
         */
-    
-
 
     // Helper functions for collapsing and expanding nodes.
 
     function collapse(d) {
+
         if (d.children) {
             d._children = d.children;
             d._children.forEach(collapse);
@@ -293,6 +329,7 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
     }
 
     function expand(d) {
+        
         if (d._children) {
             d.children = d._children;
             d.children.forEach(expand);
@@ -355,6 +392,10 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
     // Toggle children function
 
     function toggleChildren(d) {
+        if(d === root) {
+            return d;
+        }
+
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -395,8 +436,8 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
-        var nodes = tree.nodes(root).reverse(),
-            links = tree.links(nodes);
+        nodes = tree.nodes(root).reverse();
+        links = tree.links(nodes);
 
         // Update the nodes…
         node = svgGroup.selectAll("g.node")
@@ -408,7 +449,7 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
         nodes.forEach(function(d) {
             //console.log(d.y);
             //console.log(d.name);
-            d.y = d.accmDis; //maxLabelLength * 10px
+            d.y = d.accumDis; //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
             // d.y = (d.depth * 500); //500px per level.
@@ -418,7 +459,7 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
-            .call(dragListener)
+            .call(dragListenerForNodes)
             .attr("class", "node")
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
@@ -474,7 +515,7 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
 
         // Change the circle fill depending on whether it has children and is collapsed
         node.select("circle.nodeCircle")
-            .attr("r", 4.5)
+            .attr("r", nodeCircleRadius)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
             });
@@ -561,7 +602,7 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
     // Append a group which holds all nodes and which the zoom Listener can act upon.
     var svgGroup = baseSvg.append("g");
 
-    // Define the root
+    // Define the root(tree layout)
     root = treeData;
     root.x0 = viewerHeight / 2;
     root.y0 = 0;
@@ -569,4 +610,45 @@ treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
     // Layout the tree initially and center on the root node.
     update(root);
     centerNode(root);
+
+    var color = d3.scale.ordinal()
+                        .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56", "#d0743c", "#ff8c00"]);
+
+    var arc = d3.svg.arc() //function
+        .outerRadius(nodeCircleRadius + 20)
+        .innerRadius(nodeCircleRadius);
+
+    var pie = d3.layout.pie() //function
+                       .value(function(d) { return d.proportion; });
+                       
+    
+    var featureNamesPieData = null;
+
+    
+    d3.json("exJSON/features.json", function(error, data) {
+        featureNamesPieData = pie(data);
+
+        /*
+        var featuresList = svgGroup.selectAll("g.arc")
+                               .data(featureNamesPieData)
+                               .enter()
+                               .append("g")
+                               .attr("class", "arc")
+                               .attr("transform", "translate(" + 200 + "," + 100 + ")");
+        console.log(featuresList);
+        
+           featuresList.append("path")
+                       .attr("d", arc)
+                       .style("fill", function(d) { return color(d.data.name); });
+
+           featuresList.append("text")
+                       .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; }) //font-position
+                       .attr("dy", "0.35em")
+                       .style("font-size","8px")
+                       .style("text-anchor", "middle")
+                       .text(function(d) { return d.data.name; });
+        */        
+
+    });
+    
 });
