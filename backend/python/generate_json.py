@@ -71,13 +71,26 @@ noise = +np.random.rand(nD,nW)
 Pd_z, Pw_z,Pz_d,Pz_w  = plsa.plsa(Ndw+noise,nZ,100)
 
 Y = np.concatenate((Pz_d.T,Pz_w.T))
+
+
+Y = Y[:,:-1]
+#for i in range(len(Y)):
+#    Y[i] = Y[i][:2]
+
+#Y = Y[:2]
 #print np.shape(Y)
 
 #Y = tsne.tsne(Ndw.T,2,nD)
-Y = tsne.tsne(Y,2,nZ)
+
+
+
+
+#Y = tsne.tsne(Y,2,nZ)
+
 #Y = tsne.pca(Ndw.T,nD);
 #Y = tsne.pca(Pw_z.T,nZ);
-#print np.shape(Y)
+
+print np.shape(Y)
 #print Y
 
 
