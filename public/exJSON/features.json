@@ -1,12 +1,20 @@
 [
 	{
 		"name":"feature1",
-		"proportion":1
+		"proportion":1,
+		"id":1
 	},
 	
 	{
 		"name":"feature2",
-		"proportion":1
+		"proportion":1,
+		"id":2
+	},
+
+	{
+		"name":"feature3",
+		"proportion":1,
+		"id":3
 	}
-	
+
 ]
