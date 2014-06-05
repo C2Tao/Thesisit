@@ -1,6 +1,5 @@
 function queryAndDraw() {
 // Get JSON data
-//console.log("http://localhost:5000/query/" + theForm.queryStr.value);
 
 console.log($("input#searchBar").val());
 //console.log(document.getElementById('input#searchBar').value);
