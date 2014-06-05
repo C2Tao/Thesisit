@@ -6,7 +6,7 @@ import tsne
 import plsa
 import numpy as np
 import sys
-
+import copy
 #import pylab
 import math
 
@@ -47,6 +47,7 @@ for i  in range(nD):
     word_freq[i] = Counter(webtext)
     total_freq.update(webtext)
 
+
 #print word_freq[1]
 #print total_freq
 #print weblab
@@ -74,6 +75,7 @@ for d in range(len(Ndw)):
     compl = 0
     for w in range(len(Ndw[d])):
         if tfidf[w] >=1 and compl<6:
+        #if tfidf[w] >=1:
             Mdw[d][w] = tfidf[w]
             compl+=1
 print sum(Mdw[0])
@@ -95,7 +97,7 @@ Y = np.concatenate((Pz_d.T,Pz_w.T))
 
 Y = Y*10
 
-#Y = Y[:,:-1]*10
+#Y = Y[:,:1]*10
 #for i in range(len(Y)):
 #    Y[i] = Y[i][:2]
 
@@ -153,13 +155,19 @@ for i in range(4):
     key_doc = webapi['results']['papers'][i]['title']['text']
     doc_data = {}
     doc_data['x'] = Y[i,0]
-    doc_data['y'] = Y[i,1] 
+    doc_data['y'] = Y[i,1]
+    doc_data['node_href'] = webapi['results']['papers'][i]['title']['href'] 
     doc_data[node_name] = key_doc
     doc_data[node_type] = doc_type
     doc_data[children] = []
     xDiff = center_doc['x']-Y[i,0]
     yDiff = center_doc['y']-Y[i,1]
     doc_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
+
+
+    kw_unsorted = []
+    kw_value = []
+
     for j in range(nW):
         if Mdw[i][j] != 0 :
             keyword_data = {}
@@ -167,10 +175,20 @@ for i in range(4):
             keyword_data['y'] = Y[j+nD,1]
             xDiff = Y[i,0] - Y[j+nD,0]
             yDiff = Y[i,1] - Y[j+nD,1]
-            keyword_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
+            keyword_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)+5
             keyword_data[node_name] = IDword[j]
             keyword_data[node_type] = word_type
+            
             doc_data[children].append(keyword_data)
+            '''
+            kw_unsorted += copy.deepcopy(keyword_data),
+            kw_value += keyword_data[distance],
+            kw_index = [zz[0] for zz in sorted(enumerate(kw_value), key=lambda x:x[1])]
+
+            for k in kw_index:
+                if k>5:break
+                doc_data[children].append(kw_unsorted[k])
+            '''
     center_doc[children].append(doc_data)
 
 with open('json_all.txt', 'wb') as outfile:
