@@ -162,6 +162,8 @@ treeJSON = d3.json("http://localhost:5000/query/" + $("input#searchBar").val(), 
             if(selectedFeatureId !== -1) {
                 
                 //do selected operations
+                window.open(d.node_href, '_blank');
+                window.focus();
 
             }
             featuresList = null;
