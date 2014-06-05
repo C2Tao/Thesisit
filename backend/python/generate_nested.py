@@ -17,6 +17,8 @@ kimpath = "http://www.kimonolabs.com/api/8fxfaiu6?apikey=fb110eb5d4c1775fbf3e984
 #kimpath = "http://www.kimonolabs.com/api/csy9c4ho?apikey=5243944dc6c0c5602dd3f6f0ef19f2cf"
 
 query = sys.argv[1:]
+
+standard = " ".join(query)
 #print query
 query = "%20".join(query)
 query = query.replace(' ','%20')
@@ -62,7 +64,21 @@ for  i in range(nD):
     for word in word_freq[i]:
         Ndw[i][wordID[word]] = word_freq[i][word]
 
-print Ndw
+
+tf = np.sum(Ndw,0) 
+idf = np.sum(np.array(Ndw > 0,dtype=int),0)
+
+Mdw = np.zeros(np.shape(Ndw))
+for d in range(len(Ndw)):
+    tfidf = Ndw[d]/idf
+    compl = 0
+    for w in range(len(Ndw[d])):
+        if tfidf[w] >=1 and compl<6:
+            Mdw[d][w] = tfidf[w]
+            compl+=1
+print sum(Mdw[0])
+print sorted(Mdw[0])
+#print int(Ndw >= 1)
 
 
 
@@ -70,15 +86,16 @@ print Ndw
 #print Ndw
 
 
-nZ  = 3
+nZ  = 2
 
 noise = +np.random.rand(nD,nW)
 Pd_z, Pw_z,Pz_d,Pz_w  = plsa.plsa(Ndw+noise,nZ,100)
 
 Y = np.concatenate((Pz_d.T,Pz_w.T))
 
+Y = Y*10
 
-Y = Y[:,:-1]
+#Y = Y[:,:-1]*10
 #for i in range(len(Y)):
 #    Y[i] = Y[i][:2]
 
@@ -123,51 +140,40 @@ node_name = 'name'
 doc_type = 2
 word_type = 1
 
+center_doc[node_name] = standard
+center_doc['x'] = 0
+center_doc['y'] = 0
+center_doc[node_type] = doc_type
+center_doc[children] = []
 
-# for i in range(nD):
-#     key_doc = webapi['results']['papers'][i]['title']['text']
-#     if i == 0:
-#         center_doc[node_name] = key_doc
-#         center_doc['x'] = Y[0,0]
-#         center_doc['y'] = Y[0,1]
-#         center_doc[node_type] = doc_type
-#         center_doc[children] = []
 
-#         for j in range(nW):
-#             if Ndw[i][j] != 0 :
-#                 keyword_data = {}
-#                 keyword_data['x'] = Y[j+nD,0]
-#                 keyword_data['y'] = Y[j+nD,1]
-#                 xDiff = center_doc['x']-Y[j+nD,0]
-#                 yDiff = center_doc['y']-Y[j+nD,1]
-#                 keyword_data[distance] = math.sqrt(xDiff*xDiff+yDiff*yDiff)
-#                 keyword_data[node_name] = IDword[j]
-#                 keyword_data[node_type] = word_type
-#                 center_doc[children].append(keyword_data)
-#     else:
-#         doc_data = {}
-#         doc_data['x'] = Y[i,0]
-#         doc_data['y'] = Y[i,1] 
-#         doc_data[node_name] = key_doc
-#         doc_data[node_type] = doc_type
-#         doc_data[children] = []
-#         xDiff = center_doc['x']-Y[i,0]
-#         yDiff = center_doc['y']-Y[i,1]
-#         doc_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
-#         for j in range(nW):
-#             if Ndw[i][j] != 0 :
-#                 keyword_data = {}
-#                 keyword_data['x'] = Y[j+nD,0]
-#                 keyword_data['y'] = Y[j+nD,1]
-#                 xDiff = Y[i,0] - Y[j+nD,0]
-#                 yDiff = Y[i,1] - Y[j+nD,1]
-#                 keyword_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
-#                 keyword_data[node_name] = IDword[j]
-#                 keyword_data[node_type] = word_type
-#                 doc_data[children].append(keyword_data)
-#         center_doc[children].append(doc_data)
 
-# with open('json_all.txt', 'wb') as outfile:
-#     json.dump(center_doc, outfile,ensure_ascii=False)
 
-# print center_doc 
+for i in range(4):
+    key_doc = webapi['results']['papers'][i]['title']['text']
+    doc_data = {}
+    doc_data['x'] = Y[i,0]
+    doc_data['y'] = Y[i,1] 
+    doc_data[node_name] = key_doc
+    doc_data[node_type] = doc_type
+    doc_data[children] = []
+    xDiff = center_doc['x']-Y[i,0]
+    yDiff = center_doc['y']-Y[i,1]
+    doc_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
+    for j in range(nW):
+        if Mdw[i][j] != 0 :
+            keyword_data = {}
+            keyword_data['x'] = Y[j+nD,0]
+            keyword_data['y'] = Y[j+nD,1]
+            xDiff = Y[i,0] - Y[j+nD,0]
+            yDiff = Y[i,1] - Y[j+nD,1]
+            keyword_data[distance] = math.sqrt(xDiff*xDiff + yDiff*yDiff)
+            keyword_data[node_name] = IDword[j]
+            keyword_data[node_type] = word_type
+            doc_data[children].append(keyword_data)
+    center_doc[children].append(doc_data)
+
+with open('json_all.txt', 'wb') as outfile:
+    json.dump(center_doc, outfile,ensure_ascii=False)
+
+print center_doc 

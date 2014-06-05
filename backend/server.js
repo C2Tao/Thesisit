@@ -19,15 +19,15 @@ app.get('/query/:querystring', function(req, res){ //api for client to query
      var python = require('child_process').spawn(
        'python',
        // second argument is array of parameters, e.g.:
-       [__dirname + "/generate_json.py", req.params.querystring] //this parameter is the script file you want to run
+       [__dirname + "/python/generate_nested.py", req.params.querystring] //this parameter is the script file you want to run
      );
 
 
      // var output = "";
      // //when python dump info to standard output(e.g.:print ...), it would call this callback
-     // python.stdout.on('data', function(data){ 
-     //    output += data;
-     // });
+     python.stdout.on('data', function(data){ 
+         console.log(data);
+     });
  
      python.on('close', function(){  //when python finished running the script
        
