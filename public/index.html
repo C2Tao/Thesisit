@@ -52,6 +52,12 @@
  <script src="javascript/index.js"></script>
 </head>
 <body>
+<script type="text/javascript">
+function testForm() {
+  console.log("logged");
+}
+
+</script>
   <div class="logoCol">
     <h2 class="logo">ThesisIt</h2>
     <a class="about">paper search engine visualizer</a>
@@ -60,8 +66,8 @@
     <div class="LogoCircle_out"></div>
     <div class="banner"><div class="banner_tittle">ThesisIt!</div>
     <div class="ud-search search-v4 ml15">
-      <form id="searchbox" action="">
-        <input type="text" placeholder="Search for Keywords, Papers..." autocomplete="off" name="q"
+      <form id="searchbox" onSubmit="queryAndDraw(this);" action="#">
+        <input type="text" placeholder="Search for Keywords, Papers..." autocomplete="off" name="queryStr"
         class="search-input ui-autocomplete-input quick-search"
         value=""/>
         <button type="submit" class="icon-search search-btn"><img src="img/toolbar_find.png"></button>

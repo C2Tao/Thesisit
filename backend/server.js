@@ -19,7 +19,7 @@ app.get('/query/:querystring', function(req, res){ //api for client to query
      var python = require('child_process').spawn(
        'python',
        // second argument is array of parameters, e.g.:
-       [__dirname + "/generate_json.py", req.params.querystring] //this parameter is the script file you want to run
+       [__dirname + "/python/generate_json.py", req.params.querystring] //this parameter is the script file you want to run
      );
 
 
