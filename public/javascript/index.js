@@ -1,7 +1,11 @@
+function queryAndDraw() {
 // Get JSON data
-//treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
-treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData) {
 
+console.log($("input#searchBar").val());
+//console.log(document.getElementById('input#searchBar').value);
+treeJSON = d3.json("http://localhost:5000/query/" + $("input#searchBar").val(), function(error, treeData) {
+    
+    console.log(treeData);
     // Calculate total nodes, max label length
     var totalNodes = 0;
     var maxLabelLength = 0;
@@ -80,7 +84,7 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
     var featuresList = null;
     var draggingNodeText;
     // Define the drag listeners for drag/drop behaviour of nodes.
-    var circleCenter;
+    //var circleCenter;
     var selectedFeatureId = -1;
     var dragListenerForNodes = d3.behavior.drag()
         .on("dragstart", function(d) {
@@ -92,7 +96,6 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
             //console.log(d.x + ' ' + d.y);
             //var coordinates = d3.mouse(this);
             //console.log(coordinates[0] + ' ' + coordinates[1]);
-            circleCenter = [d.x,d.y];
             d3.event.sourceEvent.stopPropagation();
             // it's important that we suppress the mouseover event on the node being dragged. 
             //Otherwise it will absorb the mouseover event and the underlying node will not detect it d3.select(this).attr('pointer-events', 'none');
@@ -242,7 +245,7 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
         if(d === root) {
             return d;
         }
-
+        //console.log("test");
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -250,6 +253,19 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
             d.children = d._children;
             d._children = null;
         }
+        /*
+        if (d.name === "Kinect") {
+            d3.json("exJSON/flare.json",function (err,data) {
+                d.children = data.children;
+                console.log(data.children);
+                update(d);
+                centerNode(d);
+
+            }); 
+        }
+        */
+        //console.log(d);
+
         return d;
     }
 
@@ -260,7 +276,6 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
         d = toggleChildren(d);
         update(d);
         centerNode(d);
-        console.log("click");
     }
 
     function update(source) {
@@ -454,6 +469,8 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
     root.x0 = viewerHeight / 2;
     root.y0 = 0;
 
+    //console.log(root);
+
     // Layout the tree initially and center on the root node.
     update(root);
     centerNode(root);
@@ -478,3 +495,5 @@ treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData)
     });
     
 });
+
+}
