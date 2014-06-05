@@ -255,8 +255,9 @@ treeJSON = d3.json("http://localhost:5000/query/" + $("input#searchBar").val(), 
             d._children = null;
         }
         /*
-        if (d.name === "Kinect") {
-            d3.json("exJSON/flare.json",function (err,data) {
+        if (d.name === "assume") {
+            console.log("yes");
+            d3.json("exJSON/graphTUI.json",function (err,data) {
                 d.children = data.children;
                 console.log(data.children);
                 update(d);
