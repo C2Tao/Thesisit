@@ -5,8 +5,8 @@ function queryAndDraw() {
 console.log($("input#searchBar").val());
 //console.log(document.getElementById('input#searchBar').value);
 treeJSON = d3.json("http://localhost:5000/query/" + $("input#searchBar").val(), function(error, treeData) {
+    d3.select('svg').remove();
     
-    console.log(treeData);
     // Calculate total nodes, max label length
     var totalNodes = 0;
     var maxLabelLength = 0;
