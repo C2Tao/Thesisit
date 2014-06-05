@@ -1,5 +1,6 @@
 // Get JSON data
-treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
+//treeJSON = d3.json("exJSON/graphTUI.json", function(error, treeData) {
+treeJSON = d3.json("http://localhost:5000/query/plsa", function(error, treeData) {
 
     // Calculate total nodes, max label length
     var totalNodes = 0;
