@@ -66,12 +66,11 @@ function testForm() {
     <div class="LogoCircle_out"></div>
     <div class="banner"><div class="banner_tittle">ThesisIt!</div>
     <div class="ud-search search-v4 ml15">
-      <form id="searchbox" onSubmit="queryAndDraw(this);" action="#">
+      <!-- <form id="searchbox" onSubmit="queryAndDraw(this);" action=""> -->
         <input type="text" placeholder="Search for Keywords, Papers..." autocomplete="off" name="queryStr"
-        class="search-input ui-autocomplete-input quick-search"
-        value=""/>
-        <button type="submit" class="icon-search search-btn"><img src="img/toolbar_find.png"></button>
-      </form>
+        class="search-input ui-autocomplete-input quick-search" id="searchBar">
+        <button class="icon-search search-btn" onClick="queryAndDraw();"><img src="img/toolbar_find.png"></button>
+      <!-- </form> -->
     </div>
     <div class="LogoCircle" ><div class="logoPic" ></div></div>
   </div>

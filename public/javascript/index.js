@@ -1,8 +1,12 @@
-function queryAndDraw(theForm) {
+function queryAndDraw() {
 // Get JSON data
-//console.log(theForm.queryStr.value);
-treeJSON = d3.json("http://localhost:5000/query/" + theForm.queryStr.value, function(error, treeData) {
+//console.log("http://localhost:5000/query/" + theForm.queryStr.value);
 
+console.log($("input#searchBar").val());
+//console.log(document.getElementById('input#searchBar').value);
+treeJSON = d3.json("http://localhost:5000/query/" + $("input#searchBar").val(), function(error, treeData) {
+    
+    console.log(treeData);
     // Calculate total nodes, max label length
     var totalNodes = 0;
     var maxLabelLength = 0;
